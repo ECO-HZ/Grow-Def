@@ -124,9 +124,4 @@ Variable list:
     * Percent_surv: Survival rate of beetle larvae
 
 **Data-specific onformation for:** ***FUNGuild_dataset.xlsx***
-     
-    
-**Data-specific onformation for:** ***Json file for drawing maps***
-
-    * China_map.json
-    * custom.geo.json
+    * The FUNGuild dataset (Nguyen, N. H., Song, Z., Bates, S. T., Branco, S., Tedersoo, L., Menke, J., . . . Kennedy, P. G. (2016) FUNGuild: An open annotation tool for parsing fungal community datasets by ecological guild. Fungal Ecology, 20, 241-248.)
