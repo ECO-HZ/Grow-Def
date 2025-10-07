@@ -62,14 +62,14 @@ Variable list:
 
 **Data-specific onformation for:** ***Field_survey_OTU_tables.xlsx (This file contains 2 sheets)***
 
- Sheets: OTU_table - OTU table in field survey
+    Sheets: OTU_table - OTU table in field survey
     Variable list:
     
     * OTU_ID: Code of soil fungal taxa
     * Columns 2 to 127: Fungal taxa composition information of arthropod communites per site 
     * taxonomy: Fungal taxonomic information
     
- Sheets: Taxonomy_information - Taxonomy information of fungi in field survey
+    Sheets: Taxonomy_information - Taxonomy information of fungi in field survey
     Variable list:
     * OTU_ID: Code of soil fungal taxa
     * FUNGuild: FUNGuild information
