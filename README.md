@@ -63,6 +63,7 @@ Variable list:
 **Data-specific onformation for:** ***Field_survey_OTU_tables.xlsx (This file contains 2 sheets)***
 
     Sheets: OTU_table - OTU table in field survey
+    
     Variable list:
     
     * OTU_ID: Code of soil fungal taxa
@@ -70,7 +71,9 @@ Variable list:
     * taxonomy: Fungal taxonomic information
     
     Sheets: Taxonomy_information - Taxonomy information of fungi in field survey
+    
     Variable list:
+    
     * OTU_ID: Code of soil fungal taxa
     * FUNGuild: FUNGuild information
     * Taxonomy: Fungal taxonomic information
@@ -78,7 +81,9 @@ Variable list:
 **Data-specific onformation for:** ***Plant_community_dataset.xlsx***
 
     Sheets: Plant_community - Species composition information of plant communites per site
+    
     Variable list:
+    
     * Site: Sampling site (population) ID
     * Survey_year: Year of survey
     * Latitude: Latitude of sampling sites
@@ -89,6 +94,7 @@ Variable list:
 **Data-specific onformation for:** ***Arthropod_community_dataset.xlsx (This file contains 2 sheets)***
 
     Sheets: Arthropod_com - Species composition information of arthropod communites per site 
+    
     Variable list:
     
     * Site: Sampling site (population) ID
@@ -100,6 +106,7 @@ Variable list:
     * Columns 7 to 63: Species composition information of arthropod communites per site 
 
     Sheets: Arthropod_group - Classification of Arthropod functional group in field survey
+    
     Variable list:
     
     * Order: Order of Arthropod functional group 
@@ -109,6 +116,7 @@ Variable list:
 **Data-specific onformation for:** ***Greenhouse_exp_dataset.xlsx (This file contains 2 sheets)***
 
     Sheets: Greenhouse_exp1&3&4 - Plant growth and resistance to Alternaria foliar fungal pathogens, and root knot nematodes estimated in greenhouse experiment
+    
     Variable list:
     
     * Genotype_code: Code of genotype of studying species in greenhouse experiment
@@ -120,6 +128,7 @@ Variable list:
     * Knots: Root nematode infection (# of root knots)
 
     Sheets: Greenhouse_exp2 - Plant resistance to A. hygrophila beetles estimated in greenhouse experiment
+    
     Variable list:
     
     * Popu_code: Code of population of studying species in greenhouse experiment
