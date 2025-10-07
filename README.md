@@ -2,7 +2,7 @@ The following files allow one to reproduce analyses in the manuscript entitled "
 
 DATA & FILE OVERVIEW
 
-***In Data folder***
+***In Datasets folder***
 
 The experimental data are also stored in Figshare [![DOI](https://zenodo.org/badge/DOI/10.6084/m9.figshare.30286726.svg)](https://doi.org/10.6084/m9.figshare.30286726.v1).
 Before the manuscript is officially published, experimental and analytical data must remain confidential. 
@@ -13,7 +13,7 @@ All data will be made available upon acceptance of the manuscript.
 
     * 1. Field_survey_dataset.xlsx  * 2. Field_survey_OTU_tables.xlsx  * 3. Plant_community_dataset.xlsx
     * 4. Arthropod_community_dataset.xlsx  * 5. Greenhouse_exp_dataset.xlsx  *6. FUNGuild_dataset.xlsx  
-***In Code folder***
+***In R code folder***
 
 The names of R-scripts correspond to the statistical analysis and visualization of the corresponding figures in this manuscript.
 
