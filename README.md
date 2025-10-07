@@ -11,8 +11,13 @@ All data will be made available upon acceptance of the manuscript.
 
 *List of experimental data files*
 
-    * 1. Field_survey_dataset.xlsx  * 2. Field_survey_OTU_tables.xlsx  * 3. Plant_community_dataset.xlsx
-    * 4. Arthropod_community_dataset.xlsx  * 5. Greenhouse_exp_dataset.xlsx  *6. FUNGuild_dataset.xlsx  
+    * 1. Field_survey_dataset.xlsx  
+    * 2. Field_survey_OTU_tables.xlsx  
+    * 3. Plant_community_dataset.xlsx
+    * 4. Arthropod_community_dataset.xlsx  
+    * 5. Greenhouse_exp_dataset.xlsx  
+    * 6. FUNGuild_dataset.xlsx  
+    
 ***In R code folder***
 
 The names of R-scripts correspond to the statistical analysis and visualization of the corresponding figures in this manuscript.
@@ -63,10 +68,8 @@ Variable list:
     * OTU_ID: Code of soil fungal taxa
     * Columns 2 to 127: Fungal taxa composition information of arthropod communites per site 
     * taxonomy: Fungal taxonomic information
-
  Sheets: Taxonomy_information - Taxonomy information of fungi in field survey
     Variable list:
-    
     * OTU_ID: Code of soil fungal taxa
     * FUNGuild: FUNGuild information
     * Taxonomy: Fungal taxonomic information
