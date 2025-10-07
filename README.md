@@ -59,12 +59,14 @@ Variable list:
 
  Sheets: OTU_table - OTU table in field survey
     Variable list:
+    
     * OTU_ID: Code of soil fungal taxa
     * Columns 2 to 127: Fungal taxa composition information of arthropod communites per site 
     * taxonomy: Fungal taxonomic information
 
  Sheets: Taxonomy_information - Taxonomy information of fungi in field survey
     Variable list:
+    
     * OTU_ID: Code of soil fungal taxa
     * FUNGuild: FUNGuild information
     * Taxonomy: Fungal taxonomic information
@@ -84,6 +86,7 @@ Variable list:
 
     Sheets: Arthropod_com - Species composition information of arthropod communites per site 
     Variable list:
+    
     * Site: Sampling site (population) ID
     * Survey year: Year of survey
     * Latitude: Latitude of sampling sites
@@ -94,6 +97,7 @@ Variable list:
 
     Sheets: Arthropod_group - Classification of Arthropod functional group in field survey
     Variable list:
+    
     * Order: Order of Arthropod functional group 
     * Group: Group of Arthropod functional group 
     * Trophic group: Classification of Arthropod functional group 
@@ -102,6 +106,7 @@ Variable list:
 
     Sheets: Greenhouse_exp1&3&4 - Plant growth and resistance to Alternaria foliar fungal pathogens, and root knot nematodes estimated in greenhouse experiment
     Variable list:
+    
     * Genotype_code: Code of genotype of studying species in greenhouse experiment
     * Site: Sampling site (population) ID
     * Genotype: Genotype of study species per site
@@ -112,6 +117,7 @@ Variable list:
 
     Sheets: Greenhouse_exp2 - Plant resistance to A. hygrophila beetles estimated in greenhouse experiment
     Variable list:
+    
     * Popu_code: Code of population of studying species in greenhouse experiment
     * Site: Sampling site (population) ID
     * Species: Latin name of study species
