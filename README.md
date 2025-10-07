@@ -68,6 +68,7 @@ Variable list:
     * OTU_ID: Code of soil fungal taxa
     * Columns 2 to 127: Fungal taxa composition information of arthropod communites per site 
     * taxonomy: Fungal taxonomic information
+    
  Sheets: Taxonomy_information - Taxonomy information of fungi in field survey
     Variable list:
     * OTU_ID: Code of soil fungal taxa
