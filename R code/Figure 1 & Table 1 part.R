@@ -125,23 +125,27 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Soil_wc)) +
 
 # Figure 1C
 # Soil_C
-mod <- lm(log10(Soil_C) ~ Latitude*Species, data = figure_1_data)
-shapiro.test(residuals(mod)) # log10 was best, but did not translate it in your analysis
-anova(mod)
-
+# raw data
 mod <- lm(Soil_C ~ Latitude*Species, data = figure_1_data)
-shapiro.test(residuals(mod)) 
+shapiro.test(residuals(mod)) # W = 0.75433, p-value = 1.22e-11
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
 
-ggplot(data = figure_1_data, aes(x = Latitude, y = Soil_C)) + 
+# log10 translation
+mod <- lm(log10(Soil_C) ~ Latitude*Species, data = figure_1_data)
+shapiro.test(residuals(mod)) # W = 0.96646, p-value = 0.01193
+anova(mod)
+effectsize::eta_squared(mod, partial = TRUE)
+
+ggplot(data = figure_1_data, aes(x = Latitude, y = log10(Soil_C))) + 
   geom_point(size = 2.5, aes(color = Site_group, fill = Site_group), pch = 21, stroke = 0.7) + 
   geom_smooth(method = "lm", formula = y ~ x, se = F, color = "black", linetype = 2) +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5), "Both" = alpha("#424768", 0.3))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225", "Both" = "#424768")) + 
-  scale_y_continuous(breaks = seq(0, 10, by = 2), limits = c(0, 10), expand = c(0, 0)) +
+  #scale_y_continuous(breaks = seq(0, 10, by = 2), limits = c(0, 10), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(-0.8, 1.2, by = 0.4), limits = c(-0.8, 1.2), expand = c(0, 0)) +
   scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
@@ -152,29 +156,34 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Soil_C)) +
         panel.background = element_rect(fill = NA),
         legend.title = element_blank(), legend.background = element_blank(), 
         plot.tag = element_text(size = 14, face = "bold")) +
-  labs(x = NULL, y = "Soil carbon (g/kg)", tag = "C") -> Figure_1C; Figure_1C
+  labs(x = NULL, 
+       y = expression("Soil carbon content (g/kg, "~log[10]~")"), 
+       tag = "C") -> Figure_1C; Figure_1C
 
 
 # Figure 1D
 # Soil_N
-mod <- lm(log10(Soil_N) ~ Latitude*Species, data = figure_1_data)
-shapiro.test(residuals(mod)) # log10 was best, but did not translate it in your analysis
-anova(mod)
-
+# raw data
 mod <- lm(Soil_N ~ Latitude*Species, data = figure_1_data)
-shapiro.test(residuals(mod)) 
+shapiro.test(residuals(mod)) # W = 0.93001, p-value = 4.982e-05
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
-car::Anova(mod, type = 3)
 
-ggplot(data = figure_1_data, aes(x = Latitude, y = Soil_N)) + 
+# log10 translation
+mod <- lm(log10(Soil_N) ~ Latitude*Species, data = figure_1_data)
+shapiro.test(residuals(mod)) # W = 0.99013, p-value = 0.6752
+anova(mod)
+effectsize::eta_squared(mod, partial = TRUE)
+
+ggplot(data = figure_1_data, aes(x = Latitude, y = log10(Soil_N))) + 
   geom_point(size = 2.5, aes(color = Site_group, fill = Site_group), pch = 21, stroke = 0.7) + 
   geom_smooth(method = "lm", formula = y ~ x, se = F, color = "black", linetype = 1) +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5), "Both" = alpha("#424768", 0.3))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225", "Both" = "#424768")) + 
-  scale_y_continuous(breaks = seq(0, 0.6, by = 0.1), limits = c(0, 0.6), expand = c(0, 0)) +
+  #scale_y_continuous(breaks = seq(0, 0.6, by = 0.1), limits = c(0, 0.6), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(-1.2, -0.2, by = 0.2), limits = c(-1.2, -0.2), expand = c(0, 0)) +
   scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
@@ -185,7 +194,9 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Soil_N)) +
         panel.background = element_rect(fill = NA),
         legend.title = element_blank(), legend.background = element_blank(), 
         plot.tag = element_text(size = 14, face = "bold")) +
-  labs(x = NULL, y = "Soil nitrogen (g/kg)", tag = "D") -> Figure_1D; Figure_1D
+  labs(x = NULL, 
+       y = expression("Soil nitrogen content (g/kg, "~log[10]~")"), 
+       tag = "D") -> Figure_1D; Figure_1D
 
 
 # Figure 1E
@@ -220,7 +231,7 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Soil_ph)) +
 # Bio1
 bio1_data <- unique(figure_1_data[,c("Site", "Bio1", "Latitude")])
 mod <- lm(Bio1 ~ Latitude, data = bio1_data)
-shapiro.test(residuals(mod)) 
+shapiro.test(residuals(mod)) # W = 0.9831, p-value = 0.4079
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
 
@@ -249,7 +260,7 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Bio1)) +
 # Bio15
 bio15_data <- unique(figure_1_data[,c("Site", "Bio15", "Latitude")])
 mod <- lm(Bio15 ~ poly(Latitude, 2), data = bio15_data)
-shapiro.test(residuals(mod)) 
+shapiro.test(residuals(mod)) # W = 0.95023, p-value = 0.004769 
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
 
@@ -278,4 +289,4 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Bio15)) +
 
 # 9.09 x 8.11
 # ggsave("Figure_1_left.pdf", plot = Figure_1A, width = 9.09, height = 8.11, units = "in", dpi = 300)
-# ggsave("Figure_1_right_30s.pdf", plot = Figure_1_right, width = 7.0, height = 8.36, units = "in", dpi = 300)
+# ggsave("Figure_1_right_30s.pdf", plot = Figure_1_right, width = 7.4, height = 8.5, units = "in", dpi = 300)
