@@ -21,7 +21,7 @@ figure_2_data$Species <- as.factor(figure_2_data$Species)
 # Plant species richness (site level)
 ALLplSR_data <- unique(figure_2_data[,c("Site", "ALLplSR", "Latitude")])
 mod <- lm(ALLplSR ~ Latitude, data = ALLplSR_data)
-shapiro.test(residuals(mod))
+shapiro.test(residuals(mod)) # W = 0.98045, p-value = 0.2993
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
 
@@ -48,7 +48,7 @@ ggplot(data = ALLplSR_data, aes(x = Latitude, y = ALLplSR)) +
 # Insect herbivore family richness
 HerbFR_data <- unique(figure_2_data[,c("Site", "HerbFR", "Latitude")])
 mod <- lm(HerbFR ~ Latitude, data = HerbFR_data)
-shapiro.test(residuals(mod))
+shapiro.test(residuals(mod)) # W = 0.96702, p-value = 0.05865
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
 
@@ -74,24 +74,25 @@ ggplot(data = HerbFR_data, aes(x = Latitude, y = HerbFR)) +
 # Insect herbivore abundance
 herbAB_data <- unique(figure_2_data[,c("Site", "HerbAB", "Latitude")])
 
-mod <- lm(sqrt(HerbAB) ~ Latitude, data = herbAB_data) 
-shapiro.test(residuals(mod)) # W = 0.98325, p-value = 0.4635
-# SQRT was best, but did not translate it in your analysis
-anova(mod)
-effectsize::eta_squared(mod, partial = TRUE)
-
 # raw data
 mod <- lm(HerbAB ~ Latitude, data = herbAB_data)
 shapiro.test(residuals(mod)) # W = 0.89801, p-value = 2.873e-05
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
 
-ggplot(data = herbAB_data, aes(x = Latitude, y = HerbAB)) + 
+# sqrt-root translation
+mod <- lm(sqrt(HerbAB) ~ Latitude, data = herbAB_data) 
+shapiro.test(residuals(mod)) # W = 0.98325, p-value = 0.4635
+anova(mod)
+effectsize::eta_squared(mod, partial = TRUE)
+
+ggplot(data = herbAB_data, aes(x = Latitude, y = sqrt(HerbAB))) + 
   geom_point(size = 3, pch = 21, color = "black", stroke = 0.7, fill = alpha("black", 0.3)) + 
   geom_smooth(method = "lm", formula = y ~ x, se = F, color = "black") +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
-  scale_y_continuous(breaks = seq(0, 80, by = 20), limits = c(0, 80), expand = c(0, 0)) +
+  #scale_y_continuous(breaks = seq(0, 80, by = 20), limits = c(0, 80), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(0, 10, by = 2), limits = c(0, 10), expand = c(0, 0)) +
   scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
@@ -102,7 +103,7 @@ ggplot(data = herbAB_data, aes(x = Latitude, y = HerbAB)) +
         panel.background = element_rect(fill = NA),
         legend.title = element_blank(), legend.background = element_blank(), 
         plot.tag = element_text(size = 14, face = "bold")) +
-  labs(x = NULL, y = "Insect herbivore abundance", tag = "C") -> Figure_2C; Figure_2C
+  labs(x = NULL, y = "Insect herbivore abundance (sqrt)", tag = "C") -> Figure_2C; Figure_2C
 
 # Figure 2D
 # Foliar defoliation 
@@ -144,8 +145,9 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = log10(Defol))) +
 # raw data
 mod <- lm(Disease ~ Latitude*Species, data = figure_2_data)
 shapiro.test(residuals(mod)) # W = 0.98345, p-value = 0.1275
+anova(mod)
 
-# The model residuals conformed to normality, although a square-root transformation slightly improved it.
+# sqrt-root translation
 mod <- lm(sqrt(Disease) ~ Latitude*Species, data = figure_2_data)
 shapiro.test(residuals(mod)) # W = 0.98443, p-value = 0.1583
 anova(mod)
@@ -174,24 +176,19 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = sqrt(Disease))) +
 
 # Figure 2F
 # Soil entire fungal richness
-colnames(figure_2_data)
-# raw data
 mod <- lm(FUNGSR ~ Latitude*Species, data = figure_2_data)
 shapiro.test(residuals(mod)) # W = 0.99085, p-value = 0.5769
-
-# The model residuals conformed to normality, and the log10 transformation slightly reduced it.
-mod <- lm(log10(FUNGSR) ~ Latitude*Species, data = figure_2_data)
-shapiro.test(residuals(mod)) # W = 0.98395, p-value = 0.1425
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
 
 # Figure 3F
-ggplot(data = figure_2_data, aes(x = Latitude, y = log10(FUNGSR))) + 
+ggplot(data = figure_2_data, aes(x = Latitude, y = (FUNGSR))) + 
   geom_point(size = 3, pch = 21, stroke = 0.7, aes(color = Origin, fill = Origin)) + 
   geom_smooth(method = "lm", formula = y ~ x, se = F, color = "black") +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
-  scale_y_continuous(breaks = seq(2.6, 3.1, by = 0.1), limits = c(2.6, 3.1), expand = c(0, 0)) +
+  #scale_y_continuous(breaks = seq(2.6, 3.1, by = 0.1), limits = c(2.6, 3.1), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(400, 1200, by = 200), limits = c(400, 1200), expand = c(0, 0)) +
   scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
@@ -205,20 +202,20 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = log10(FUNGSR))) +
         legend.title = element_blank(), legend.background = element_blank(), 
         plot.tag = element_text(size = 14, face = "bold")) +
   labs(x = NULL, 
-       y = expression("Soil entire fungal richness ("~log[10]~")"), 
+       #y = expression("Soil entire fungal richness ("~log[10]~")"), 
+       y = expression("Soil entire fungal richness"), 
        tag = "F") -> Figure_2F; Figure_2F
 
 
 # Figure 2G
 # Soil pathogenic fungi richness
-
 # raw data
 mod <- lm(PATHSR ~ Latitude*Species, data = figure_2_data)
-shapiro.test(residuals(mod)) # W = 0.97966, p-value = 0.0546
+shapiro.test(residuals(mod)) # W = 0.97944, p-value = 0.05199
 
-# The model residuals conformed to normality, although log10 transformation improved it.
+# log10 translation
 mod <- lm(log10(PATHSR) ~ Latitude*Species, data = figure_2_data)
-shapiro.test(residuals(mod)) # W = 0.98654, p-value = 0.2502
+shapiro.test(residuals(mod)) # W = 0.98661, p-value = 0.2537
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
 
@@ -247,7 +244,6 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = log10(PATHSR))) +
 
 # Figure 2H
 # Soil AMF richness
-
 # raw data
 mod <- lm(AMFSR ~ Latitude*Species, data = figure_2_data)
 shapiro.test(residuals(mod)) # W = 0.86381, p-value = 2.146e-09
@@ -267,7 +263,6 @@ effectsize::eta_squared(mod, partial = TRUE)
 mod <- lm(sqrt(AMFSR) ~ Latitude, data = subset(figure_2_data, Species == "Alternanthera_philoxeroides"))
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
-
 
 # Figure 3H
 ggplot(data = figure_2_data, aes(x = Latitude, y = sqrt(AMFSR))) + 
@@ -294,10 +289,5 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = sqrt(AMFSR))) +
 
 (Figure_2A/Figure_2C/Figure_2E/Figure_2G)|(Figure_2B/Figure_2D/Figure_2F/Figure_2H) -> Figure_2
 
-# ggsave("Figure 2.pdf", plot = Figure_2, width = 9.38, height = 11.90, units = "in", dpi = 300)
-
-
-
-
-
+# ggsave("Figure 2-10-14.pdf", plot = Figure_2, width = 9.38, height = 11.90, units = "in", dpi = 300)
 
