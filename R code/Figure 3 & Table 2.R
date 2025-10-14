@@ -71,10 +71,6 @@ Bsurv_data$Origin <- factor(Bsurv_data$Origin, levels = c("Native", "Invasive"))
 Bsurv_data$Species <- factor(Bsurv_data$Species)
 
 # Bsurv
-#mod <- glm(Percent_surv/100 ~ lat * Species, family=quasibinomial(link="logit"), data = Bsurv_data)
-#car::Anova(mod, test = "F")
-#effectsize::eta_squared(mod, partial = TRUE)
-
 mod = glm(cbind(surv, start - surv) ~ Latitude * Species, family=binomial(link="logit"), data = Bsurv_data)
 anova(mod, test = "F")
 
@@ -101,7 +97,6 @@ anova(mod, test = "F")
 
 mod = glm(cbind(surv, start - surv) ~ Latitude * Species, family=binomial(link="logit"), data = Bsurv_data)
 anova(mod, test = "F")
-
 
 # plot 
 mod = glm(cbind(surv, start - surv) ~ Latitude * Species, family=binomial(link="logit"), data = Bsurv_data)
@@ -155,6 +150,7 @@ ggplot(data = Bsurv_data, aes(x = Latitude, y = Percent_surv/100)) +
 mod <- lm(Lesion ~ Latitude*Species, data = figure_3_data)
 shapiro.test(residuals(mod)) # W = 0.97767, p-value = 0.09363
 
+# sqrt-root translation
 mod <- lm(sqrt(Lesion) ~ Latitude*Species, data = figure_3_data)
 shapiro.test(residuals(mod)) # W = 0.98076, p-value = 0.1615
 anova(mod)
@@ -189,14 +185,13 @@ ggplot(data = figure_3_data, aes(x = Latitude, y = sqrt(Lesion))) +
        tag = "C") -> Figure_3C; Figure_3C
 
 
-
-
 # Figure 3D
 # Root nematode infection
 # raw data
 mod <- lm(Knots ~ Latitude*Species, data = figure_3_data)
 shapiro.test(residuals(mod)) # W = 0.91247, p-value = 5.733e-06
 
+# sqrt-root translation
 mod <- lm(sqrt(Knots) ~ Latitude*Species, data = figure_3_data)
 shapiro.test(residuals(mod)) # W = 0.98593, p-value = 0.3697
 anova(mod)
