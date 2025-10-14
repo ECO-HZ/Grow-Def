@@ -29,6 +29,7 @@ The names of R-scripts correspond to the statistical analysis and visualization 
     * 3. Figure 2 & Table 1 part.R  
     * 4. Figure 3 & Table 2.R  
     * 5. Figure 4.R   
+    * 6. Figure S2.R   
     
 **Data-specific onformation for:** ***Field_survey_dataset.xlsx***
 
@@ -50,7 +51,8 @@ The names of R-scripts correspond to the statistical analysis and visualization 
     * HerbAB: Abundance of herbivorous insects (site level)
     * HerbFR: Richness (family) of herbivorous insects (site level)
     * ALLplSR: Plant species richness
-    * Cover: Relative abundance of studying species
+    * Cover: Cover of studying species (%)
+    * Rel_cover: Relative cover of studying species
     * Defol: Foliar defoliation (%)
     * Disease: Foliar pathogen infection (%)
     * Con_mass: Aboveground biomass of studying sepcies (g)
