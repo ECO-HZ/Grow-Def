@@ -21,14 +21,19 @@ figure_4_data$SQRTlesion <- sqrt(figure_4_data$Lesion)
 figure_4_data$SQRTknots <- sqrt(figure_4_data$Knots)
 figure_4_data$LOGdefol <- log10(figure_4_data$Defol)
 figure_4_data$SQRTdisease <- sqrt(figure_4_data$Disease)
-figure_4_data$LOGFUNG <- log10(figure_4_data$FUNGSR)
+#figure_4_data$LOGFUNG <- log10(figure_4_data$FUNGSR) # no translation
 figure_4_data$LOGPATH <- log10(figure_4_data$PATHSR)
 figure_4_data$SQRTAMF <- sqrt(figure_4_data$AMFSR)
 
+# data translation
+figure_4_data$LOGSoil_C <- log10(figure_4_data$Soil_C)
+figure_4_data$LOGSoil_N <- log10(figure_4_data$Soil_N)
+figure_4_data$SQRTHerbAB <- sqrt(figure_4_data$HerbAB)
+
 ################################ Native dataset ################################
 figure_4_data_nat <- subset(figure_4_data, Origin == "Native")
-select_var <- c("Soil_wc", "Soil_C", "Soil_N", "Soil_ph", "Bio1", "Bio15", "ALLplSR", "HerbFR", "HerbAB", "LOGdefol", 
-                "SQRTdisease", "LOGFUNG", "LOGPATH", "SQRTAMF")
+select_var <- c("Soil_wc", "LOGSoil_C", "LOGSoil_N", "Soil_ph", "Bio1", "Bio15", "ALLplSR", "HerbFR", "SQRTHerbAB", "LOGdefol", 
+                "SQRTdisease", "FUNGSR", "LOGPATH", "SQRTAMF")
 
 cor_results <- corr.test(figure_4_data_nat[,c("Con_mass", "Bsurv", "SQRTlesion", "SQRTknots")], 
                          figure_4_data_nat[, select_var], method = "spearman", adjust = "none")
@@ -97,9 +102,8 @@ plot_data$Respond_var[plot_data$Respond_var == "Bsurv"] <- "Beetle survival"
 plot_data$Respond_var[plot_data$Respond_var == "SQRTlesion"] <- "Disease lesions"
 plot_data$Respond_var[plot_data$Respond_var == "SQRTknots"] <- "Root knots"
 
-
-plot_data$Predict_var[plot_data$Predict_var == "Soil_C"] <- "Soil carbon content"
-plot_data$Predict_var[plot_data$Predict_var == "Soil_N"] <- "Soil nitrogen content"
+plot_data$Predict_var[plot_data$Predict_var == "LOGSoil_C"] <- "Soil carbon content"
+plot_data$Predict_var[plot_data$Predict_var == "LOGSoil_N"] <- "Soil nitrogen content"
 plot_data$Predict_var[plot_data$Predict_var == "Soil_wc"] <- "Soil water content"
 plot_data$Predict_var[plot_data$Predict_var == "Soil_ph"] <- "Soil pH"
 
@@ -108,11 +112,11 @@ plot_data$Predict_var[plot_data$Predict_var == "Bio15"] <- "Precipitation season
 
 plot_data$Predict_var[plot_data$Predict_var == "ALLplSR"] <- "Plant species richness"
 plot_data$Predict_var[plot_data$Predict_var == "HerbFR"] <- "Herbivore richess"
-plot_data$Predict_var[plot_data$Predict_var == "HerbAB"] <- "Herbivore abundance"
+plot_data$Predict_var[plot_data$Predict_var == "SQRTHerbAB"] <- "Herbivore abundance"
 plot_data$Predict_var[plot_data$Predict_var == "LOGdefol"] <- "Foliar defoliation"
 plot_data$Predict_var[plot_data$Predict_var == "SQRTdisease"] <- "Foliar pathogen infection"
 
-plot_data$Predict_var[plot_data$Predict_var == "LOGFUNG"] <- "Soil entire fungal richness"
+plot_data$Predict_var[plot_data$Predict_var == "FUNGSR"] <- "Soil entire fungal richness"
 plot_data$Predict_var[plot_data$Predict_var == "LOGPATH"] <- "Soil pathogenic fungal richness"
 plot_data$Predict_var[plot_data$Predict_var == "SQRTAMF"] <- "Soil AMF richness"
 
@@ -135,7 +139,6 @@ plot_data$Predict_group <- dplyr::case_when(
   plot_data$Predict_var %in% c("Plant species richness", "Herbivore richess", "Herbivore abundance", "Foliar defoliation", "Foliar pathogen infection") ~ "Plant",
   plot_data$Predict_var %in% c("Soil entire fungal richness", "Soil pathogenic fungal richness", "Soil AMF richness") ~ "Fungi")
 
-summary(plot_data$Correlation)
 ggplot(plot_data, aes(x = Respond_var, y = Predict_var, fill = Correlation)) +
   geom_tile(color = "white", linewidth = 0.5) + 
   geom_text(aes(label = sprintf("%.2f\n%s", Correlation, significance)), 
@@ -161,5 +164,5 @@ ggplot(plot_data, aes(x = Respond_var, y = Predict_var, fill = Correlation)) +
   guides(fill = guide_colorbar( title.position = "top", title.hjust = 0.5,barwidth = 1, barheight = 22)) +
   coord_cartesian(clip = 'off') -> Figure_4; Figure_4
 
-# ggsave("Figure_4.pdf", plot = Figure_4, width = 8.35, height = 7.36, units = "in", dpi = 300)
+# ggsave("Figure_4_new.pdf", plot = Figure_4, width = 8.35, height = 7.36, units = "in", dpi = 300)
 
