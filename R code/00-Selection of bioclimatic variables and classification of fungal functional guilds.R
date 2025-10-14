@@ -7,12 +7,12 @@ library(terra)
 library(psych)
 library(corrplot)
 library(dplyr)
-getwd()
+library(vegan)
 
 # download WorldClim 2.1 bioclimatic variables at 30 arc-second resolution
 #wc <- worldclim_global(var="bio", res=2.5, path="bioclimate")
 
-files <- list.files("J ECO R Code & dataset/bioclimate_30s/climate/wc2.1_30s", 
+files <- list.files("F:/2024-2025分析相关文件/植物抗性纬度变化/J eco 9-21/bioclimate_30s/climate/wc2.1_30s", 
                     pattern = "tif$", full.names = TRUE)
 
 # download WorldClim 2.1 bioclimatic variables at 2.5 arc-minute resolution
@@ -25,7 +25,7 @@ wc <- rast(files)
 
 # loading coordinates dataset
 field_survey_dataset <- read.xlsx("Field_survey_dataset.xlsx", sheet = "Field_survey", colNames = T, rowNames = F)
-coords_data <- (field_survey_dataset[, c("Site", "Longitude", "Latitude")])
+coords_data <- unique(field_survey_dataset[, c("Site", "Longitude", "Latitude")])
 coords <- coords_data[, c("Longitude", "Latitude")]
 
 # obtained 19 bioclimatic variables for each sampling site
@@ -34,9 +34,11 @@ clim_values <- terra::extract(wc, coords_data[,-1])
 colnames(clim_values)[-1] <- gsub("^wc2\\.1_30s_bio_", "Bio", colnames(clim_values)[-1])
 climate_data <- cbind(coords_data, clim_values[-1])
 #write.csv(climate_data,"climate_data.csv")
-
+#colnames(field_survey_dataset)
+colnames(climate_data)
+#climate_data = unique(field_survey_dataset[,c(5,6,25:43)])
 # Spearman correlation matrix
-corr_matrix <- corr.test(climate_data[,c(4:22)], method = "spearman", adjust = "none")
+corr_matrix <- corr.test(climate_data[,c(4,15:22,5:14)], method = "spearman", adjust = "none")
 
 # only show the signification correlation
 col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
@@ -65,7 +67,7 @@ tax_default = data.frame(OTU_ID = rownames(tax_default),
                          taxonomy = tax_default$taxonomy)
 
 # loading FUNGuild database
-fung <- get_funguild_db()
+# fung <- get_funguild_db()
 # saveRDS(fung, 'funguild.rds')
 fung <- loadRDS('funguild.rds')
 fungdataframe <- data.frame(fung)
@@ -81,7 +83,9 @@ OTU_tax <- tax_default %>% tidyr::separate(col = taxonomy,
 
 ############################### Plant Pathogen #################################
 # Plant Pathogen
-Pathogen_id1 <- subset(fung_guilds, guild == "|Plant Pathogen|" | guild == "Plant Pathogen")$OTU_ID
+Pathogen_id1 <- subset(fung_guilds, guild == "|Plant Pathogen|" | guild == "Plant Pathogen")
+unique(Pathogen_id1$confidenceRanking)
+Pathogen_id1 <- subset(Pathogen_id1, confidenceRanking != "Possible")$OTU_ID; length(Pathogen_id1)
 
 # genus - Fusarium
 Pathogen_id2 <- subset(OTU_tax, Genus == "g__Fusarium")$OTU_ID
@@ -92,4 +96,25 @@ Pathogens_ID <- unique(c(Pathogen_id1, Pathogen_id2)); length(Pathogens_ID)
 ############################ Arbuscular Mycorrhizal ############################
 AMF_ID <- subset(OTU_tax, Phylum == "p__Glomeromycota")$OTU_ID; length(AMF_ID)
 
+# calculated the richness of fungi
+Field_fungal_otu <- read.xlsx("Field_survey_OTU_tables.xlsx", sheet = "OTU_table", colNames = T, rowNames = T)
+Field_fungal_otu$taxonomy <- NULL
 
+# Total fungal richness
+FUNGSR <- as.data.frame(specnumber(t(Field_fungal_otu)))
+colnames(FUNGSR) <- "FUNGSR"
+FUNGSR$Popu_code <- rownames(FUNGSR)
+
+# Fungal pathogen richness
+PATHSR <- as.data.frame(specnumber(t(Field_fungal_otu[Pathogens_ID,])))
+colnames(PATHSR) <- "PATHSR"
+PATHSR$Popu_code <- rownames(PATHSR)
+
+# AMF richness
+AMFSR <- as.data.frame(specnumber(t(Field_fungal_otu[AMF_ID,])))
+colnames(AMFSR) <- "AMFSR"
+AMFSR$Popu_code <- rownames(AMFSR)
+
+# Merge data
+Field_fungal_SR <- FUNGSR %>% left_join(PATHSR) %>% left_join(AMFSR)
+# write.xlsx(Field_fungal_SR, file = "Field_fungal_SR.xlsx")
