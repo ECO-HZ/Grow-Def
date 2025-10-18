@@ -35,7 +35,8 @@ ggplot(data = figure_S2_data, aes(x = Latitude, y = log10(Rel_cover*100))) +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   #scale_y_continuous(breaks = seq(1.0, 1.8, by = 0.1), limits = c(1.0, 1.8), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   theme_classic() +
@@ -49,4 +50,4 @@ ggplot(data = figure_S2_data, aes(x = Latitude, y = log10(Rel_cover*100))) +
         legend.title = element_blank(), legend.background = element_blank(), 
         plot.tag = element_text(size = 14, face = "bold")) +
   labs(x = "Latitude (North degress)", 
-       y = expression("Focal species’ relative abundance (%, " ~ log[10] ~ ")"))
+       y = "Focal species' relative abundance\n(%, Log10-transformed)")
