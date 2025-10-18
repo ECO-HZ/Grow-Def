@@ -126,7 +126,7 @@ The names of R-scripts correspond to the statistical analysis and visualization 
     * Genotype: Genotype of study species per site
     * Species: Latin name of study species
     * Con_mass: Aboveground biomass of studying sepcies (g)
-    * Lesion: Leaf fungal pathogen infection (# of lesions)
+    * Lesion: Leaf fungal pathogen infection intensity
     * Knots: Root nematode infection (# of root knots)
 
     Sheets: Greenhouse_exp2 - Plant resistance to A. hygrophila beetles estimated in greenhouse experiment
