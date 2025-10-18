@@ -21,7 +21,6 @@ figure_4_data$SQRTlesion <- sqrt(figure_4_data$Lesion)
 figure_4_data$SQRTknots <- sqrt(figure_4_data$Knots)
 figure_4_data$LOGdefol <- log10(figure_4_data$Defol)
 figure_4_data$SQRTdisease <- sqrt(figure_4_data$Disease)
-#figure_4_data$LOGFUNG <- log10(figure_4_data$FUNGSR) # no translation
 figure_4_data$LOGPATH <- log10(figure_4_data$PATHSR)
 figure_4_data$SQRTAMF <- sqrt(figure_4_data$AMFSR)
 
@@ -165,4 +164,5 @@ ggplot(plot_data, aes(x = Respond_var, y = Predict_var, fill = Correlation)) +
   coord_cartesian(clip = 'off') -> Figure_4; Figure_4
 
 # ggsave("Figure_4_new.pdf", plot = Figure_4, width = 8.35, height = 7.36, units = "in", dpi = 300)
+
 
