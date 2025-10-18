@@ -101,7 +101,7 @@ mod <- lm(Soil_wc ~ Latitude*Species, data = figure_1_data)
 shapiro.test(residuals(mod))
 anova(mod)
 effectsize::eta_squared(mod, partial = TRUE)
-
+library(scales)
 ggplot(data = figure_1_data, aes(x = Latitude, y = Soil_wc)) + 
   geom_point(size = 2.5, aes(color = Site_group, fill = Site_group), pch = 21, stroke = 0.7) + 
   geom_smooth(method = "lm", formula = y ~ x, se = F, color = "black") +
@@ -110,7 +110,8 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Soil_wc)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5), "Both" = alpha("#424768", 0.3))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225", "Both" = "#424768")) + 
   scale_y_continuous(limits = c(0, 80), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
@@ -146,7 +147,8 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = log10(Soil_C))) +
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225", "Both" = "#424768")) + 
   #scale_y_continuous(breaks = seq(0, 10, by = 2), limits = c(0, 10), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(-0.8, 1.2, by = 0.4), limits = c(-0.8, 1.2), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
@@ -184,7 +186,8 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = log10(Soil_N))) +
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225", "Both" = "#424768")) + 
   #scale_y_continuous(breaks = seq(0, 0.6, by = 0.1), limits = c(0, 0.6), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(-1.2, -0.2, by = 0.2), limits = c(-1.2, -0.2), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
@@ -213,8 +216,9 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Soil_ph)) +
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5), "Both" = alpha("#424768", 0.3))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225", "Both" = "#424768")) + 
-  scale_y_continuous(breaks = seq(4.5, 8.5, by = 0.5), limits = c(4.5, 8.5), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(4.5, 8.5, by = 1), limits = c(4.5, 8.5), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
@@ -242,8 +246,9 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Bio1)) +
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5), "Both" = alpha("#424768", 0.3))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225", "Both" = "#424768")) + 
-  scale_y_continuous(breaks = seq(10, 26, by = 2), limits = c(10, 26), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(10, 26, by = 4), limits = c(10, 26), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
@@ -272,7 +277,8 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Bio15)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5), "Both" = alpha("#424768", 0.3))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225", "Both" = "#424768")) + 
   scale_y_continuous(breaks = seq(40, 140, by = 20), limits = c(40, 140), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
@@ -287,6 +293,3 @@ ggplot(data = figure_1_data, aes(x = Latitude, y = Bio15)) +
 
 (Figure_1B/Figure_1D/Figure_1F)|(Figure_1C/Figure_1E/Figure_1G) -> Figure_1_right #; Figure_1_right
 
-# 9.09 x 8.11
-# ggsave("Figure_1_left.pdf", plot = Figure_1A, width = 9.09, height = 8.11, units = "in", dpi = 300)
-# ggsave("Figure_1_right_30s.pdf", plot = Figure_1_right, width = 7.4, height = 8.5, units = "in", dpi = 300)
