@@ -31,7 +31,8 @@ ggplot(data = ALLplSR_data, aes(x = Latitude, y = ALLplSR)) +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   scale_y_continuous(breaks = seq(0, 30, by = 5), limits = c(0, 30), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
@@ -57,8 +58,9 @@ ggplot(data = HerbFR_data, aes(x = Latitude, y = HerbFR)) +
   geom_smooth(method = "lm", formula = y ~ x, se = F, color = "black") +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
-  scale_y_continuous(breaks = seq(0, 16, by = 2), limits = c(0, 16), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(0, 16, by = 4), limits = c(0, 16), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
@@ -93,7 +95,8 @@ ggplot(data = herbAB_data, aes(x = Latitude, y = sqrt(HerbAB))) +
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   #scale_y_continuous(breaks = seq(0, 80, by = 20), limits = c(0, 80), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(0, 10, by = 2), limits = c(0, 10), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
@@ -122,8 +125,9 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = log10(Defol))) +
   geom_smooth(method = "lm", formula = y ~ x, se = F, color = "black") +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
-  scale_y_continuous(breaks = seq(-1.5, 2.5, by = 0.5), limits = c(-1.5, 2.5), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(-1.5, 2.5, by = 1), limits = c(-1.5, 2.5), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   theme_classic() +
@@ -145,7 +149,6 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = log10(Defol))) +
 # raw data
 mod <- lm(Disease ~ Latitude*Species, data = figure_2_data)
 shapiro.test(residuals(mod)) # W = 0.98345, p-value = 0.1275
-anova(mod)
 
 # sqrt-root translation
 mod <- lm(sqrt(Disease) ~ Latitude*Species, data = figure_2_data)
@@ -159,7 +162,8 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = sqrt(Disease))) +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   scale_y_continuous(breaks = seq(0, 12, by = 2), limits = c(0, 12), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   theme_classic() +
@@ -189,7 +193,8 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = (FUNGSR))) +
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   #scale_y_continuous(breaks = seq(2.6, 3.1, by = 0.1), limits = c(2.6, 3.1), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(400, 1200, by = 200), limits = c(400, 1200), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   theme_classic() +
@@ -224,8 +229,9 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = log10(PATHSR))) +
   geom_smooth(method = "lm", formula = y ~ x, se = F, color = "black") +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
-  scale_y_continuous(breaks = seq(1.0, 1.8, by = 0.1), limits = c(1.0, 1.8), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(1.0, 1.8, by = 0.2), limits = c(1.0, 1.8), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   theme_classic() +
@@ -271,7 +277,8 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = sqrt(AMFSR))) +
   #ggpmisc::stat_poly_eq(aes(color = Origin, label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   scale_y_continuous(breaks = seq(0, 4, by = 1), limits = c(0, 4), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   scale_linetype_manual(values = c(2, 1)) + 
@@ -288,6 +295,4 @@ ggplot(data = figure_2_data, aes(x = Latitude, y = sqrt(AMFSR))) +
 
 
 (Figure_2A/Figure_2C/Figure_2E/Figure_2G)|(Figure_2B/Figure_2D/Figure_2F/Figure_2H) -> Figure_2
-
-# ggsave("Figure 2-10-14.pdf", plot = Figure_2, width = 9.38, height = 11.90, units = "in", dpi = 300)
 
