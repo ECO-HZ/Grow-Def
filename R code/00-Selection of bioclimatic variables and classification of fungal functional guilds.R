@@ -12,8 +12,7 @@ library(vegan)
 # download WorldClim 2.1 bioclimatic variables at 30 arc-second resolution
 #wc <- worldclim_global(var="bio", res=2.5, path="bioclimate")
 
-files <- list.files("F:/2024-2025分析相关文件/植物抗性纬度变化/J eco 9-21/bioclimate_30s/climate/wc2.1_30s", 
-                    pattern = "tif$", full.names = TRUE)
+files <- list.files("bioclimate_30s/climate/wc2.1_30s", pattern = "tif$", full.names = TRUE)
 
 # download WorldClim 2.1 bioclimatic variables at 2.5 arc-minute resolution
 #wc <- worldclim_global(var="bio", res=2.5, path="bioclimate")
@@ -118,3 +117,4 @@ AMFSR$Popu_code <- rownames(AMFSR)
 # Merge data
 Field_fungal_SR <- FUNGSR %>% left_join(PATHSR) %>% left_join(AMFSR)
 # write.xlsx(Field_fungal_SR, file = "Field_fungal_SR.xlsx")
+
