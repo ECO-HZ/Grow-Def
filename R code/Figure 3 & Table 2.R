@@ -41,8 +41,9 @@ ggplot(data = figure_3_data, aes(x = Latitude, y = Con_mass)) +
   geom_smooth(method = "lm", formula = y ~ x, se = F, aes(color = Origin, linetype = Origin)) +
   #ggpmisc::stat_poly_eq(aes(color = Origin, label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
-  scale_y_continuous(breaks = seq(0, 16, by = 2), limits = c(0, 16), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(0, 16, by = 4), limits = c(0, 16), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   scale_linetype_manual(values = c(1, 2)) + 
@@ -123,7 +124,8 @@ ggplot(data = Bsurv_data, aes(x = Latitude, y = Percent_surv/100)) +
   geom_point(size = 2.5, pch = 21, stroke = 0.7, aes(color = Origin, fill = Origin)) +
   geom_line(data = newdata, mapping = aes(x = Latitude, y = fit, color = Origin, linetype = Origin), size = 1) + 
   scale_y_continuous(breaks = seq(0, 1, by = 0.2), limits = c(0, 1), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   scale_linetype_manual(values = c(1, 2)) + 
@@ -164,7 +166,8 @@ ggplot(data = figure_3_data, aes(x = Latitude, y = sqrt(Lesion))) +
   #ggpmisc::stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), color = "black", 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
   scale_y_continuous(breaks = seq(1, 5, by = 1), limits = c(1, 5), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   scale_linetype_manual(values = c(2, 2)) + 
@@ -180,7 +183,7 @@ ggplot(data = figure_3_data, aes(x = Latitude, y = sqrt(Lesion))) +
         legend.title = element_blank(), legend.background = element_blank(), 
         plot.tag = element_text(size = 14, face = "bold")) +
   labs(x = "Latitude (North degress)", 
-       y = expression(frac("Leaf fungal pathogen infection\n(# of lesions, sqrt)", 
+       y = expression(frac("Leaf fungal pathogen\ninfection intensity (sqrt)", 
                            "   Decreasing pathogen resistance   ")), 
        tag = "C") -> Figure_3C; Figure_3C
 
@@ -214,8 +217,9 @@ ggplot(data = figure_3_data, aes(x = Latitude, y = sqrt(Knots))) +
   geom_smooth(method = "lm", formula = y ~ x, se = F, aes(color = Origin, linetype = Origin)) +
   #ggpmisc::stat_poly_eq(aes(color = Origin, label = paste(..rr.label.., ..p.value.label.., sep = "~~~")), 
   #                      formula = y ~ x, parse = TRUE, size = 4, label.y.npc = "top", rr.digits = 3) + 
-  scale_y_continuous(breaks = seq(0, 16, by = 2), limits = c(0, 16), expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(0, 16, by = 4), limits = c(0, 16), expand = c(0, 0)) +
+  #scale_x_continuous(breaks = seq(20, 39, by = 2), limits = c(20, 39), expand = c(0, 0)) +
+  scale_x_continuous(breaks = breaks_width(4)) +
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   scale_linetype_manual(values = c(1, 2)) + 
@@ -237,7 +241,3 @@ ggplot(data = figure_3_data, aes(x = Latitude, y = sqrt(Knots))) +
 
 # save plot
 (Figure_3A/Figure_3C)|(Figure_3B/Figure_3D) -> Figure_3
-
-# ggsave("Figure 3.pdf", plot = Figure_3, width = 10.35, height = 7.7, units = "in", dpi = 300)
-
-
