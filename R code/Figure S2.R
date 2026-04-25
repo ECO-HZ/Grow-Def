@@ -20,7 +20,7 @@ figure_2_data$Origin <- factor(figure_2_data$Origin, levels = c("Native", "Invas
 figure_2_data$Species <- as.factor(figure_2_data$Species)
 
 #
-jitter_max_deg <- 3.2 * 1e-6  # 约0.35米
+jitter_max_deg <- 3.2 * 1e-6  # Approximately 0.35 meters.
 
 #
 set.seed(123456)
