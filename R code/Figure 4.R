@@ -190,6 +190,7 @@ figure_4_data_reshape <- figure_4_data_reshape %>%
          AGbio1 = above1_r,
          SoilBio1 = below1_r)
 
+cor.test(figure_4_data_reshape$Latitude, figure_4_data_reshape$climate1)
 ################################################################################
 # only for both site
 figure_4_data_all <- subset(figure_4_data_reshape, Group == "Both")
@@ -329,22 +330,37 @@ optimized_models <- lapply(t.modlist, function(model) {
 })
 
 library(car)
+shapiro.test(resid(optimized_models[[1]]))
+hist(resid(optimized_models[[1]]))
+plot(fitted(optimized_models[[1]]), resid(optimized_models[[1]], type = "normalized"))
+abline(h = 0, lty = 2)
 Anova(optimized_models[[1]], type = "III", test.statistic = "Chisq")
 #summary(optimized_models[[1]])
 effectsize::effectsize(optimized_models[[1]])
 AIC(optimized_models[[1]])
 
-
+shapiro.test(resid(optimized_models[[2]]))
+hist(resid(optimized_models[[2]]))
+plot(fitted(optimized_models[[2]]), resid(optimized_models[[2]], type = "normalized"))
+abline(h = 0, lty = 2)
 Anova(optimized_models[[2]], type = "III", test.statistic = "Chisq")
 #summary(optimized_models[[2]])
 effectsize::effectsize(optimized_models[[2]])
 AIC(optimized_models[[2]])
 
+shapiro.test(resid(optimized_models[[3]]))
+hist(resid(optimized_models[[3]]))
+plot(fitted(optimized_models[[3]]), resid(optimized_models[[3]], type = "normalized"))
+abline(h = 0, lty = 2)
 Anova(optimized_models[[3]], type = "III", test.statistic = "Chisq")
 #summary(optimized_models[[3]])
 effectsize::effectsize(optimized_models[[3]])
 AIC(optimized_models[[3]])
 
+shapiro.test(resid(optimized_models[[4]]))
+hist(resid(optimized_models[[4]]))
+plot(fitted(optimized_models[[4]]), resid(optimized_models[[4]], type = "normalized"))
+abline(h = 0, lty = 2)
 Anova(optimized_models[[4]], type = "III", test.statistic = "Chisq")
 effectsize::effectsize(optimized_models[[4]])
 summary(optimized_models[[4]])
@@ -376,22 +392,37 @@ optimized_models <- lapply(t.modlist, function(model) {
 })
 
 library(car)
+shapiro.test(resid(optimized_models[[1]]))
+hist(resid(optimized_models[[1]]))
+plot(fitted(optimized_models[[1]]), resid(optimized_models[[1]], type = "normalized"))
+abline(h = 0, lty = 2)
 Anova(optimized_models[[1]], type = "III", test.statistic = "Chisq")
 #summary(optimized_models[[1]])
 effectsize::effectsize(optimized_models[[1]])
 AIC(optimized_models[[1]])
 
-
+shapiro.test(resid(optimized_models[[2]]))
+hist(resid(optimized_models[[2]]))
+plot(fitted(optimized_models[[2]]), resid(optimized_models[[2]], type = "normalized"))
+abline(h = 0, lty = 2)
 Anova(optimized_models[[2]], type = "III", test.statistic = "Chisq")
 #summary(optimized_models[[2]])
 effectsize::effectsize(optimized_models[[2]])
 AIC(optimized_models[[2]])
 
+shapiro.test(resid(optimized_models[[3]]))
+hist(resid(optimized_models[[3]]))
+plot(fitted(optimized_models[[3]]), resid(optimized_models[[3]], type = "normalized"))
+abline(h = 0, lty = 2)
 Anova(optimized_models[[3]], type = "III", test.statistic = "Chisq")
 #summary(optimized_models[[3]])
 effectsize::effectsize(optimized_models[[3]])
 AIC(optimized_models[[3]])
 
+shapiro.test(resid(optimized_models[[4]]))
+hist(resid(optimized_models[[4]]))
+plot(fitted(optimized_models[[4]]), resid(optimized_models[[4]], type = "normalized"))
+abline(h = 0, lty = 2)
 Anova(optimized_models[[4]], type = "III", test.statistic = "Chisq")
 #summary(optimized_models[[4]])
 effectsize::effectsize(optimized_models[[4]])
