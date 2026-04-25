@@ -12,7 +12,8 @@ library(vegan)
 # download WorldClim 2.1 bioclimatic variables at 30 arc-second resolution
 #wc <- worldclim_global(var="bio", res=2.5, path="bioclimate")
 
-files <- list.files("bioclimate_30s/climate/wc2.1_30s", pattern = "tif$", full.names = TRUE)
+files <- list.files("F:/2024-2025分析相关文件/植物抗性纬度变化/J eco 9-21/bioclimate_30s/climate/wc2.1_30s", 
+                    pattern = "tif$", full.names = TRUE)
 
 # download WorldClim 2.1 bioclimatic variables at 2.5 arc-minute resolution
 #wc <- worldclim_global(var="bio", res=2.5, path="bioclimate")
@@ -118,3 +119,66 @@ AMFSR$Popu_code <- rownames(AMFSR)
 Field_fungal_SR <- FUNGSR %>% left_join(PATHSR) %>% left_join(AMFSR)
 # write.xlsx(Field_fungal_SR, file = "Field_fungal_SR.xlsx")
 
+
+################## Spatial autocorrelation test for variables ##################
+# loading package
+library(openxlsx)
+library(dplyr)
+library(spdep)
+library(sp)
+
+# loading field survey dataset
+figure_4_data <- read.xlsx("Field_survey_dataset.xlsx", sheet = "Field_survey", colNames = T)
+figure_4_data$Origin <- ifelse(figure_4_data$Species == "Alternanthera_philoxeroides", "Invasive", "Native")
+figure_4_data$Origin <- factor(figure_4_data$Origin, levels = c("Native", "Invasive"))
+figure_4_data$Species <- as.factor(figure_4_data$Species)
+
+# raw data
+test_var = c("Soil_wc_all", "Soil_C_all", "Soil_N_all", "Soil_ph_all", 
+             "Bio1", "Bio15", 
+             "ALLplSR", "HerbFR", "HerbAB", "Defol", 
+             "Disease", "FUNGSR", "PATHSR", "AMFSR",
+             "Con_mass", "Bsurv", "Lesion", "Knots", "Rel_cover")
+
+colnames(figure_4_data)
+
+# Create an empty data frame
+moran_results <- data.frame(
+  Variable = character(),
+  Moran_I = numeric(),
+  Expected_I = numeric(),
+  Variance = numeric(),
+  Std_Dev = numeric(),
+  P_value = numeric(),
+  stringsAsFactors = FALSE
+)
+
+# Alternanthera_philoxeroides  Alternanthera_sessilis
+figure_4_data_sel = subset(figure_4_data, Species == "Alternanthera_philoxeroides")
+
+for (var_name in test_var) {
+  
+  figure_4_data_filter <- figure_4_data_sel[complete.cases(figure_4_data_sel[, var_name]), ]
+  
+  coords_mat <- as.matrix(figure_4_data_filter[, c("Longitude", "Latitude")])
+  variable_values <- figure_4_data_filter[[var_name]]
+  
+  nb <- knn2nb(knearneigh(coords_mat, k = 5))
+  listw <- nb2listw(nb, style = "W")
+  
+  # Moran's I
+  moran_test <- moran.test(variable_values, listw, randomisation = TRUE)
+  
+  # created a dataframe
+  moran_results <- rbind(moran_results, data.frame(
+    Variable = var_name,
+    Moran_I = round(moran_test$estimate[1], 2),
+    Expected_I = moran_test$estimate[2],
+    Variance = moran_test$estimate[3],
+    Std_Dev = as.numeric(moran_test$statistic),
+    P_value = round(moran_test$p.value, 3),
+    stringsAsFactors = FALSE
+  ))
+}
+
+print(moran_results)
