@@ -62,6 +62,7 @@ shapiro.test(resid(mod1))
 hist(resid(mod1))
 plot(fitted(mod1), resid(mod1, type = "normalized"))
 abline(h = 0, lty = 2)
+car::Anova(mod1, type = "III", test.statistic = "Chisq")
 piecewiseSEM::rsquared(mod1)
 
 #
