@@ -54,14 +54,15 @@ MuMIn::AICc(mod1,mod2,mod3,mod4,mod5)
 mod1 <- gls(Rel_cover ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Rel_cover_data, method = "REML", na.action = na.omit)
 shapiro.test(resid(mod1))
 hist(resid(mod1))
+plot(fitted(mod1), resid(mod1, type = "normalized"))
+abline(h = 0, lty = 2)
 
 # log10 transformed was best
 mod1 <- gls(log10(Rel_cover) ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Rel_cover_data, method = "REML", na.action = na.omit)
-#mod1 <- gls(log10(Rel_cover) ~ Latitude+Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Rel_cover_data, method = "REML", na.action = na.omit)
-
 shapiro.test(resid(mod1))
 hist(resid(mod1))
-#anova(mod1)
+plot(fitted(mod1), resid(mod1, type = "normalized"))
+abline(h = 0, lty = 2)
 car::Anova(mod1, type = "III", test.statistic = "Chisq")
 
 Rel_cover_data$F0 <- predictSE(mod1, Rel_cover_data, level = 0)$fit
