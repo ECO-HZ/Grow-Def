@@ -13,10 +13,7 @@ All data will be made available upon acceptance of the manuscript.
 
     * 1. Field_survey_dataset.xlsx  
     * 2. Field_survey_OTU_tables.xlsx  
-    * 3. Plant_community_dataset.xlsx
-    * 4. Arthropod_community_dataset.xlsx  
-    * 5. Greenhouse_exp_dataset.xlsx  
-    * 6. FUNGuild_dataset.xlsx  
+    * 3. FUNGuild_dataset.xlsx  
     
 ***In R code folder***
 
