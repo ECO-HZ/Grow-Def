@@ -23,7 +23,7 @@ figure_2_data$Origin <- factor(figure_2_data$Origin, levels = c("Native", "Invas
 figure_2_data$Species <- as.factor(figure_2_data$Species)
 
 #
-jitter_max_deg <- 3.2 * 1e-6  # 约0.35米
+jitter_max_deg <- 3.2 * 1e-6  # Approximately 0.35 meters.
 
 #
 set.seed(123456)
@@ -323,26 +323,26 @@ m_lat <- gls(SQRTDisease ~ Latitude,correlation = corExp(form = ~ lat_jitter + l
 m_lat_spp <- gls(SQRTDisease ~ Latitude + Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Disease_data, method = "REML")
 m_full <- gls(SQRTDisease ~ Latitude * Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Disease_data, method = "REML")
 
-# 计算 R²
+# Calculate the R-squared.
 r2_0 <- piecewiseSEM::rsquared(m0)$R.squared
 r2_lat <- piecewiseSEM::rsquared(m_lat)$R.squared
 r2_lat_spp <- piecewiseSEM::rsquared(m_lat_spp)$R.squared
 r2_full <- piecewiseSEM::rsquared(m_full)$R.squared
 
-# 计算贡献
+# Calculate the contribution.
 r2_contribution <- c(
   Latitude = r2_lat - r2_0,
   Species = r2_lat_spp - r2_lat,
   Interaction = r2_full - r2_lat_spp
 )
 
-# 计算 Cohen's f
+# Calculate Cohen's f.
 denom <- 1 - r2_full
 f_lat <- sqrt((r2_lat - r2_0) / denom)
 f_spp <- sqrt((r2_lat_spp - r2_lat) / denom)
 f_int <- sqrt((r2_full - r2_lat_spp) / denom)
 
-# 结果
+# Print result
 result <- data.frame(
   Predictor = c("Latitude", "Species", "Interaction"),
   R2_Contribution = r2_contribution,
@@ -405,26 +405,26 @@ m_lat <- gls(FUNGSR ~ Latitude,correlation = corExp(form = ~ lat_jitter + lon_ji
 m_lat_spp <- gls(FUNGSR ~ Latitude + Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = FUNGSR_data, method = "REML")
 m_full <- gls(FUNGSR ~ Latitude * Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = FUNGSR_data, method = "REML")
 
-# 计算 R²
+# Calculate the R-squared.
 r2_0 <- piecewiseSEM::rsquared(m0)$R.squared
 r2_lat <- piecewiseSEM::rsquared(m_lat)$R.squared
 r2_lat_spp <- piecewiseSEM::rsquared(m_lat_spp)$R.squared
 r2_full <- piecewiseSEM::rsquared(m_full)$R.squared
 
-# 计算贡献
+# Calculate the contribution.
 r2_contribution <- c(
   Latitude = r2_lat - r2_0,
   Species = r2_lat_spp - r2_lat,
   Interaction = r2_full - r2_lat_spp
 )
 
-# 计算 Cohen's f
+# Calculate Cohen's f.
 denom <- 1 - r2_full
 f_lat <- sqrt((r2_lat - r2_0) / denom)
 f_spp <- sqrt((r2_lat_spp - r2_lat) / denom)
 f_int <- sqrt((r2_full - r2_lat_spp) / denom)
 
-# 结果
+# Print result
 result <- data.frame(
   Predictor = c("Latitude", "Species", "Interaction"),
   R2_Contribution = r2_contribution,
@@ -499,26 +499,26 @@ m_lat <- gls(LOGPATHSR ~ Latitude,correlation = corExp(form = ~ lat_jitter + lon
 m_lat_spp <- gls(LOGPATHSR ~ Latitude + Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = PATHSR_data, method = "REML")
 m_full <- gls(LOGPATHSR ~ Latitude * Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = PATHSR_data, method = "REML")
 
-# 计算 R²
+# Calculate the R-squared.
 r2_0 <- piecewiseSEM::rsquared(m0)$R.squared
 r2_lat <- piecewiseSEM::rsquared(m_lat)$R.squared
 r2_lat_spp <- piecewiseSEM::rsquared(m_lat_spp)$R.squared
 r2_full <- piecewiseSEM::rsquared(m_full)$R.squared
 
-# 计算贡献
+# Calculate the contribution.
 r2_contribution <- c(
   Latitude = r2_lat - r2_0,
   Species = r2_lat_spp - r2_lat,
   Interaction = r2_full - r2_lat_spp
 )
 
-# 计算 Cohen's f
+# Calculate Cohen's f.
 denom <- 1 - r2_full
 f_lat <- sqrt((r2_lat - r2_0) / denom)
 f_spp <- sqrt((r2_lat_spp - r2_lat) / denom)
 f_int <- sqrt((r2_full - r2_lat_spp) / denom)
 
-# 结果
+# Print result
 result <- data.frame(
   Predictor = c("Latitude", "Species", "Interaction"),
   R2_Contribution = r2_contribution,
@@ -593,26 +593,26 @@ m_lat <- gls(SQRTAMFSR ~ Latitude,correlation = corExp(form = ~ lat_jitter + lon
 m_lat_spp <- gls(SQRTAMFSR ~ Latitude + Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = AMFSR_data, method = "REML")
 m_full <- gls(SQRTAMFSR ~ Latitude * Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = AMFSR_data, method = "REML")
 
-# 计算 R²
+# Calculate the R-squared.
 r2_0 <- piecewiseSEM::rsquared(m0)$R.squared
 r2_lat <- piecewiseSEM::rsquared(m_lat)$R.squared
 r2_lat_spp <- piecewiseSEM::rsquared(m_lat_spp)$R.squared
 r2_full <- piecewiseSEM::rsquared(m_full)$R.squared
 
-# 计算贡献
+# Calculate the contribution.
 r2_contribution <- c(
   Latitude = r2_lat - r2_0,
   Species = r2_lat_spp - r2_lat,
   Interaction = r2_full - r2_lat_spp
 )
 
-# 计算 Cohen's f
+# Calculate Cohen's f.
 denom <- 1 - r2_full
 f_lat <- sqrt((r2_lat - r2_0) / denom)
 f_spp <- sqrt((r2_lat_spp - r2_lat) / denom)
 f_int <- sqrt((r2_full - r2_lat_spp) / denom)
 
-# 结果
+# Print result
 result <- data.frame(
   Predictor = c("Latitude", "Species", "Interaction"),
   R2_Contribution = r2_contribution,
