@@ -8,20 +8,26 @@ library(dplyr)
 library(ggplot2)
 library(psych)
 library(ggtext)
+library(piecewiseSEM)
+library(nlme)
+library(FactoMineR)
+library(factoextra)
+library(ade4)
 
 # loading field survey dataset
 figure_4_data <- read.xlsx("Field_survey_dataset.xlsx", sheet = "Field_survey", colNames = T)
 figure_4_data$Origin <- ifelse(figure_4_data$Species == "Alternanthera_philoxeroides", "Invasive", "Native")
 figure_4_data$Origin <- factor(figure_4_data$Origin, levels = c("Native", "Invasive"))
 figure_4_data$Species <- as.factor(figure_4_data$Species)
+rownames(figure_4_data) <- figure_4_data$Popu_code
 
 # data translation
 figure_4_data$LOGSoil_C <- log10(figure_4_data$Soil_C_all)
 figure_4_data$LOGSoil_N <- log10(figure_4_data$Soil_N_all)
 figure_4_data$SQRTHerbAB <- sqrt(figure_4_data$HerbAB)
 
-figure_4_data$LOGdefol <- log10(figure_4_data$Defol)
-figure_4_data$SQRTDisease <- sqrt(figure_4_data$Disease)
+figure_4_data$LOGdefol <- log10(figure_4_data$Defol_med)
+figure_4_data$SQRTDisease <- sqrt(figure_4_data$Disease_med)
 figure_4_data$LOGPATH <- log10(figure_4_data$PATHSR)
 figure_4_data$SQRTAMF <- sqrt(figure_4_data$AMFSR)
 
@@ -49,12 +55,12 @@ figure_4_data_reshape = rbind(figure_4_data_same, figure_4_data_unique)
 colnames(figure_4_data_reshape)
 rownames(figure_4_data_reshape) = figure_4_data_reshape$Popu_code
 
-library(FactoMineR)
-library(factoextra)
+figure_4_data_reshape = figure_4_data
 
 # PCA for climate, soil, abover and below groups
 # CLIMATE PC
-pca_climate <- PCA(figure_4_data_reshape[,c("Bio1", "Bio15")], scale.unit = TRUE, graph = F)
+climate_data <- na.omit(figure_4_data_reshape[,c("Bio1", "Bio15")])
+pca_climate <- PCA(climate_data, scale.unit = TRUE, graph = F)
 pca_climate_loadings <- as.data.frame(pca_climate$var$coord)
 pca_climate_loadings$Variable <- rownames(pca_climate_loadings)
 variance_explained <- round(as.data.frame(pca_climate$eig)$`percentage of variance`, 1)
@@ -79,35 +85,26 @@ ggplot(pca_scores_climate, aes(x = climate1_r, y = climate2_r)) +
         axis.text = element_text(size = 11, color = "black"),
         plot.tag = element_text(size = 14, face = "bold"))-> P1; P1
 
-# soil PC
-#soil_pc <- figure_4_data_reshape[,c("Soil_wc_all", "LOGSoil_C", "LOGSoil_N", "Soil_ph_all")]
-#soil_pc <- na.omit(soil_pc)
-#pca_soil <- PCA(pca_input, scale.unit = TRUE, graph = T)
-#pca_soil$var$coord   
-#pca_soil$eig 
-#pca_scores_soil <- as.data.frame(pca_soil$ind$coord)[,c(1:2)]
-#colnames(pca_scores_soil) <- c("soil1_r", "soil2_r")
-#pca_scores_soil$Popu_code <- rownames(pca_scores_soil)
-#fviz_pca_biplot(pca_soil, col.var = "black", col.ind = "black", repel = TRUE, label = "var")             
 
-soil_pc <- figure_4_data_reshape[,c("Soil_wc_all", "LOGSoil_C", "LOGSoil_N", "Soil_ph_all")]
-soil_pc <- na.omit(soil_pc)
-pca_soil <- prcomp((soil_pc), center = TRUE, scale. = TRUE)
-pca_scores_soil <- as.data.frame(pca_soil$x)[,1:2]
-colnames(pca_scores_soil) = c("soil1_r", "soil2_r")
-pca_scores_soil$Popu_code <- rownames(pca_scores_soil)
-variance_explained <- round(pca_soil$sdev^2 / sum(pca_soil$sdev^2) * 100, 1)
-pca_soil_loadings <- as.data.frame(pca_soil$rotation[, 1:2])
+# soil PC
+soil_data <- figure_4_data_reshape[,c("Soil_wc_all", "LOGSoil_C", "LOGSoil_N", "Soil_ph_all")]
+soil_data <- na.omit(soil_data)
+pca_soil <- dudi.pca(soil_data, scannf = FALSE, nf = 2, scale = TRUE)
+variance_explained <- round(pca_soil$eig/sum(pca_soil$eig)*100, 1)
+pca_soil_loadings <- pca_soil$co 
 pca_soil_loadings$Variable <- rownames(pca_soil_loadings)
+pca_scores_soil <- as.data.frame(get_pca_ind(pca_soil)$coord)
+colnames(pca_scores_soil) <- c("soil1_r", "soil2_r")
+pca_scores_soil$Popu_code <- rownames(pca_scores_soil)
 
 ggplot(pca_scores_soil, aes(x = soil1_r, y = soil2_r)) +  
   geom_vline(xintercept = 0, linetype = "dashed", color = "black") +  
   geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  
   geom_point(size = 3, alpha = 1, shape = 21, fill = "grey", color = "black") +  
-  geom_segment(data = pca_soil_loadings, aes(x = 0, y = 0, xend = PC1 * 3.5, yend = PC2 * 3.5),               
+  geom_segment(data = pca_soil_loadings, aes(x = 0, y = 0, xend = Comp1 * 3.5, yend = Comp2 * 3.5),               
                arrow = arrow(length = unit(0.2, "cm")), color = "black") +  
   geom_text(data = pca_soil_loadings,             
-            aes(x = PC1 * 3.6, y = PC2 * 3.6, label = Variable), color = "black") +  
+            aes(x = Comp1 * 3.6, y = Comp2 * 3.6, label = Variable), color = "black") +  
   labs(x = paste0("PC1 (", variance_explained[1], "%)"),       
        y = paste0("PC2 (", variance_explained[2], "%)"), tag = "B") + 
   theme_classic() +
@@ -171,8 +168,6 @@ ggplot(pca_scores_below, aes(x = below1_r, y = below2_r)) +
         axis.text = element_text(size = 11, color = "black"),
         plot.tag = element_text(size = 14, face = "bold"))-> P4; P4
 
-#(P1|P2)/(P3|P4)
-
 ################################################################################
 figure_4_data_reshape = figure_4_data_reshape %>% 
   left_join(pca_scores_climate[,c("Popu_code", "climate1_r")]) %>% 
@@ -190,15 +185,13 @@ figure_4_data_reshape <- figure_4_data_reshape %>%
          AGbio1 = above1_r,
          SoilBio1 = below1_r)
 
-cor.test(figure_4_data_reshape$Latitude, figure_4_data_reshape$climate1)
 ################################################################################
 # only for both site
 figure_4_data_all <- subset(figure_4_data_reshape, Group == "Both")
 figure_4_data_all <- na.omit(figure_4_data_all)
 dim(figure_4_data_all)
+
 ################################################################################
-library(piecewiseSEM)
-library(nlme)
 
 SEM_updated0 = psem(
   gls(SoilPhys1 ~ climate1, 
@@ -256,53 +249,7 @@ SEM_updated2 = psem(
 SEM_summary2 = summary(SEM_updated2, .progressBar = TRUE, standardize = "scale")
 max_p_row <- which.max(SEM_summary2$coefficients$P.Value)
 SEM_summary2$coefficients[max_p_row, ]
-
-
-# AGbio1 %~~% SoilBio1
-SEM_updated3 = psem(
-  gls(SoilPhys1 ~ climate1, 
-      correlation = corExp(form = ~ lat_jitter + lon_jitter), data = figure_4_data_all), 
-  
-  gls(AGbio1 ~ climate1, 
-      correlation = corExp(form = ~ lat_jitter + lon_jitter), data = figure_4_data_all), 
-  
-  gls(SoilBio1 ~ climate1, 
-      correlation = corExp(form = ~ lat_jitter + lon_jitter), data = figure_4_data_all) 
-  
-  #
-  #AGbio1 %~~% SoilBio1
-)
-
-SEM_summary3 = summary(SEM_updated3, .progressBar = TRUE, standardize = "scale")
-max_p_row <- which.max(SEM_summary3$coefficients$P.Value)
-SEM_summary3$coefficients[max_p_row, ]
-
-################################################################################
-all_models <- list(
-  SEM_updated0 = SEM_updated0,
-  SEM_updated1 = SEM_updated1, 
-  SEM_updated2 = SEM_updated2,
-  SEM_updated3 = SEM_updated3
-)
-
-comparison_table <- data.frame()
-
-for(i in 1:length(all_models)) {
-  model <- all_models[[i]]
-  
-  mod_sum <- summary(model, .progressBar = TRUE)
-  
-  comparison_table <- rbind(comparison_table, 
-                            data.frame(Model = names(all_models)[i], 
-                                       AIC = mod_sum$IC$AIC,
-                                       df = mod_sum$Cstat$df,
-                                       Fisher_C = mod_sum$Cstat$Fisher.C,
-                                       Fisher_P = mod_sum$Cstat$P.Value))
-}
-
-# rank by AIC 
-comparison_table <- comparison_table[order(comparison_table$AIC), ]
-print(comparison_table)
+print(SEM_summary2)
 
 ################################ Native dataset ################################
 figure_4_data_nat <- subset(figure_4_data_all, Origin == "Native")
