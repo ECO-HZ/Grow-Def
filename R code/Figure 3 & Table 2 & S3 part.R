@@ -42,6 +42,7 @@ colnames(figure_3_data_reshape)
 # for both
 #figure_3_data_reshape = subset(figure_3_data_reshape, Group == "Both")
 #dim(figure_3_data_reshape)
+figure_3_data_reshape = figure_3_data
 
 # Figure 3A
 # Aboveground mass
@@ -145,7 +146,7 @@ ggplot(data = Con_mass_data, aes(x = Latitude, y = Con_mass)) +
                            "           Increasing growth rate           ")), 
        tag = "A") -> Figure_3A; Figure_3A
 
-
+library(car)
 # Figure 3B
 # Loading leaf beetle survival dataset 
 Bsurv_data <- figure_3_data_reshape[complete.cases(figure_3_data_reshape[, "Bsurv"]), ]
@@ -490,6 +491,4 @@ ggplot(data = Knots_data, aes(x = Latitude, y = SQRTKnots)) +
 # save plot
 (Figure_3A/Figure_3C)|(Figure_3B/Figure_3D) -> Figure_3
 
-# ggsave("Figure 3-0415.pdf", plot = Figure_3, width = 10.35, height = 7.7, units = "in", dpi = 300)
-
-
+# ggsave("Figure 3-0601.pdf", plot = Figure_3, width = 10.35, height = 7.7, units = "in", dpi = 300)
