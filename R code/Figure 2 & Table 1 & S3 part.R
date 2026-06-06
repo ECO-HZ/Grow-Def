@@ -15,6 +15,7 @@ library(nlme)
 library(MuMIn)
 library(car)
 library(AICcmodavg)
+library(piecewiseSEM)
 
 # loading field survey dataset
 figure_2_data <- read.xlsx("Field_survey_dataset.xlsx", sheet = "Field_survey", colNames = T)
@@ -40,9 +41,10 @@ figure_2_data_unique$lon_jitter <- figure_2_data_unique$Longitude
 figure_2_data_reshape = rbind(figure_2_data_same, figure_2_data_unique)
 colnames(figure_2_data_reshape)
 
+figure_2_data_reshape = figure_2_data
+
 # for both
-#figure_2_data_reshape = subset(figure_2_data_reshape, Group == "Both")
-#dim(figure_2_data_reshape)
+#figure_2_data_reshape = subset(figure_2_data_reshape, Group == "Both"); dim(figure_2_data_reshape)
 
 
 # Figure 2A
@@ -77,7 +79,7 @@ ggplot(ALLplSR_data, aes(x=Latitude, y=ALLplSR)) +
   geom_point(size = 3, pch = 21, color = "black", stroke = 0.7, fill = alpha("black", 0.3)) + 
   #geom_point(size = 3, color = "black", fill = "grey", pch = 21) + 
   geom_line(aes(y=F0), size=1) + 
-  scale_y_continuous(breaks = seq(0, 30, by = 5), limits = c(0, 30), expand = c(0, 0)) +
+  scale_y_continuous(breaks = seq(0, 25, by = 5), limits = c(0, 25), expand = c(0, 0)) +
   scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
@@ -194,27 +196,27 @@ ggplot(herbAB_data, aes(x=Latitude, y=sqrt(HerbAB))) +
 
 # Figure 2D
 # Foliar defoliation
-Defol_data = figure_2_data_reshape[complete.cases(figure_2_data_reshape[, "Defol"]), ]
+Defol_data = figure_2_data_reshape[complete.cases(figure_2_data_reshape[, "Defol_med"]), ]
 
 # raw data
-mod1 <- gls(Defol ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
-mod2 <- gls(Defol ~ Latitude*Species, correlation = corGaus(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
-mod3 <- gls(Defol ~ Latitude*Species, correlation = corLin(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
-mod4 <- gls(Defol ~ Latitude*Species, correlation = corRatio(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
-mod5 <- gls(Defol ~ Latitude*Species, correlation = corSpher(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
-anova(mod1,mod2,mod3,mod4,mod5) 
-MuMIn::AICc(mod1,mod2,mod3,mod4,mod5)
+mod1 <- gls(Defol_med ~ poly(Latitude, 2)*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+mod2 <- gls(Defol_med ~ poly(Latitude, 2)*Species, correlation = corGaus(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+mod3 <- gls(Defol_med ~ poly(Latitude, 2)*Species, correlation = corLin(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+mod4 <- gls(Defol_med ~ poly(Latitude, 2)*Species, correlation = corRatio(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+mod5 <- gls(Defol_med ~ poly(Latitude, 2)*Species, correlation = corSpher(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+anova(mod1,mod2,mod3,mod4) 
+MuMIn::AICc(mod1,mod2,mod3,mod4)
 
 # raw data
-mod1 <- gls(Defol ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+mod1 <- gls(Defol_med ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
 shapiro.test(resid(mod1))
 hist(resid(mod1))
 plot(fitted(mod1), resid(mod1, type = "normalized"))
 abline(h = 0, lty = 2)
 
 # log10 transformed was best
-Defol_data$LOGDefol <- log10(Defol_data$Defol)
-mod1 <- gls(LOGDefol ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+Defol_data$LOGDefol <- log10(Defol_data$Defol_med)
+mod1 <- gls(LOGDefol ~ poly(Latitude, 2)*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
 shapiro.test(resid(mod1))
 hist(resid(mod1))
 plot(fitted(mod1), resid(mod1, type = "normalized"))
@@ -224,9 +226,9 @@ piecewiseSEM::rsquared(mod1)
 
 #
 m0 <- gls(LOGDefol ~ 1,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Defol_data, method = "REML")
-m_lat <- gls(LOGDefol ~ Latitude,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Defol_data, method = "REML")
-m_lat_spp <- gls(LOGDefol ~ Latitude + Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Defol_data, method = "REML")
-m_full <- gls(LOGDefol ~ Latitude * Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Defol_data, method = "REML")
+m_lat <- gls(LOGDefol ~ poly(Latitude, 2),correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Defol_data, method = "REML")
+m_lat_spp <- gls(LOGDefol ~ poly(Latitude, 2) + Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Defol_data, method = "REML")
+m_full <- gls(LOGDefol ~ poly(Latitude, 2) * Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Defol_data, method = "REML")
 
 # Calculate the R-squared.
 r2_0 <- piecewiseSEM::rsquared(m0)$R.squared
@@ -257,20 +259,25 @@ result <- data.frame(
                        ifelse(c(f_lat, f_spp, f_int) < 0.25, "Medium", "Large")))
 print(result)
 
-Defol_data$F0 <- predictSE(mod1, Defol_data, level = 0)$fit
-Defol_data$SE <- predictSE(mod1, Defol_data, level = 0)$se.fit
+#Defol_data$F0 <- predictSE(mod1, Defol_data, level = 0)$fit
+#Defol_data$SE <- predictSE(mod1, Defol_data, level = 0)$se.fit
 
 # Global model
-mod0 <- gls(LOGDefol ~ Latitude, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+mod0 <- gls(LOGDefol ~ poly(Latitude, 2) * Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+car::Anova(mod0, type = "III", test.statistic = "Chisq")
+
+Defol_data$Latitude2 <- Defol_data$Latitude^2
+mod0 <- gls(LOGDefol ~ Latitude + Latitude2, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Defol_data, method = "REML", na.action = na.omit)
+car::Anova(mod0, type = "III", test.statistic = "Chisq")
 Defol_data$F00 <- predictSE(mod0, Defol_data, level = 0)$fit
 Defol_data$SE0 <- predictSE(mod0, Defol_data, level = 0)$se.fit
 
-ggplot(data = Defol_data, aes(x = Latitude, y = log10(Defol))) + 
+ggplot(data = Defol_data, aes(x = Latitude, y = LOGDefol)) + 
   geom_point(size = 3, pch = 21, stroke = 0.7, aes(color = Origin, fill = Origin)) + 
   geom_line(aes(y=F00), size = 1) + 
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
-  scale_y_continuous(breaks = seq(-1.5, 2.5, by = 1), limits = c(-1.5, 2.5), expand = c(0, 0)) +
+  #scale_y_continuous(breaks = seq(-1.5, 2.5, by = 1), limits = c(-1.5, 2.5), expand = c(0, 0)) +
   scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
@@ -285,31 +292,29 @@ ggplot(data = Defol_data, aes(x = Latitude, y = log10(Defol))) +
        y = expression("Leaf defoliation (%," ~ log[10] ~ ")"), 
        tag = "D") -> Figure_2D; Figure_2D
 
-
-
 # Figure 2E
 # Foliar pathogen infection
-Disease_data = figure_2_data_reshape[complete.cases(figure_2_data_reshape[, "Disease"]), ]
+Disease_data = figure_2_data_reshape[complete.cases(figure_2_data_reshape[, "Disease_med"]), ]
 
 # raw data
-mod1 <- gls(Disease ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
-mod2 <- gls(Disease ~ Latitude*Species, correlation = corGaus(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
-mod3 <- gls(Disease ~ Latitude*Species, correlation = corLin(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
-mod4 <- gls(Disease ~ Latitude*Species, correlation = corRatio(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
-mod5 <- gls(Disease ~ Latitude*Species, correlation = corSpher(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
-anova(mod1,mod2,mod4,mod5) # remove mod3 (false convergence)
-MuMIn::AICc(mod1,mod2,mod4,mod5)
+mod1 <- gls(Disease_med ~ poly(Latitude, 2)*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+mod2 <- gls(Disease_med ~ poly(Latitude, 2)*Species, correlation = corGaus(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+mod3 <- gls(Disease_med ~ poly(Latitude, 2)*Species, correlation = corLin(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+mod4 <- gls(Disease_med ~ poly(Latitude, 2)*Species, correlation = corRatio(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+mod5 <- gls(Disease_med ~ poly(Latitude, 2)*Species, correlation = corSpher(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+anova(mod1,mod2,mod3,mod4,mod5) # remove mod3 (false convergence)
+MuMIn::AICc(mod1,mod2,mod3,mod4,mod5)
 
 # raw data
-mod1 <- gls(Disease ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+mod1 <- gls(Disease_med ~ poly(Latitude, 2)*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
 shapiro.test(resid(mod1))
 hist(resid(mod1))
 plot(fitted(mod1), resid(mod1, type = "normalized"))
 abline(h = 0, lty = 2)
 
 # sqrt-root traslantion
-Disease_data$SQRTDisease <- sqrt(Disease_data$Disease)
-mod1 <- gls(SQRTDisease ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+Disease_data$SQRTDisease <- sqrt(Disease_data$Disease_med)
+mod1 <- gls(SQRTDisease ~ poly(Latitude, 2)*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
 shapiro.test(resid(mod1))
 hist(resid(mod1))
 plot(fitted(mod1), resid(mod1, type = "normalized"))
@@ -319,9 +324,9 @@ piecewiseSEM::rsquared(mod1)
 
 #
 m0 <- gls(SQRTDisease ~ 1,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Disease_data, method = "REML")
-m_lat <- gls(SQRTDisease ~ Latitude,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Disease_data, method = "REML")
-m_lat_spp <- gls(SQRTDisease ~ Latitude + Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Disease_data, method = "REML")
-m_full <- gls(SQRTDisease ~ Latitude * Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Disease_data, method = "REML")
+m_lat <- gls(SQRTDisease ~ poly(Latitude, 2),correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Disease_data, method = "REML")
+m_lat_spp <- gls(SQRTDisease ~ poly(Latitude, 2) + Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Disease_data, method = "REML")
+m_full <- gls(SQRTDisease ~ poly(Latitude, 2) * Species,correlation = corExp(form = ~ lat_jitter + lon_jitter),data = Disease_data, method = "REML")
 
 # Calculate the R-squared.
 r2_0 <- piecewiseSEM::rsquared(m0)$R.squared
@@ -352,20 +357,26 @@ result <- data.frame(
                        ifelse(c(f_lat, f_spp, f_int) < 0.25, "Medium", "Large")))
 print(result)
 
-Disease_data$F0 <- predictSE(mod1, Disease_data, level = 0)$fit
-Disease_data$SE <- predictSE(mod1, Disease_data, level = 0)$se.fit
+#Disease_data$F0 <- predictSE(mod1, Disease_data, level = 0)$fit
+#Disease_data$SE <- predictSE(mod1, Disease_data, level = 0)$se.fit
 
 # Global model
-mod0 <- gls(SQRTDisease ~ Latitude, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+Disease_data$Latitude2 <- Disease_data$Latitude^2
+mod0 <- gls(SQRTDisease ~ poly(Latitude, 2) * Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+car::Anova(mod0, type = "III", test.statistic = "Chisq")
+
+mod0 <- gls(SQRTDisease ~ Latitude + Latitude2, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Disease_data, method = "REML", na.action = na.omit)
+piecewiseSEM::rsquared(mod0)
+
 Disease_data$F00 <- predictSE(mod0, Disease_data, level = 0)$fit
 Disease_data$SE0 <- predictSE(mod0, Disease_data, level = 0)$se.fit
 
 ggplot(data = Disease_data, aes(x = Latitude, y = SQRTDisease)) + 
   geom_point(size = 3, pch = 21, stroke = 0.7, aes(color = Origin, fill = Origin)) + 
-  geom_line(aes(y=F00), size = 1) + 
+  geom_line(aes(y=F00), size = 1, linetype = 1) + 
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5))) + 
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
-  scale_y_continuous(breaks = seq(0, 12, by = 2), limits = c(0, 12), expand = c(0, 0)) +
+  #scale_y_continuous(breaks = seq(0, 12, by = 2), limits = c(0, 12), expand = c(0, 0)) +
   scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
   theme(axis.title = element_text(size = 13),
@@ -665,4 +676,6 @@ ggplot(data = AMFSR_data, aes(x = Latitude, y = SQRTAMFSR)) +
 
 
 (Figure_2A/Figure_2C/Figure_2E/Figure_2G)|(Figure_2B/Figure_2D/Figure_2F/Figure_2H) -> Figure_2
-#ggsave("Figure 2-0415.pdf", plot = Figure_2, width = 10.9, height = 13.90, units = "in", dpi = 300)
+# ggsave("Figure 2-0605.pdf", plot = Figure_2, width = 10.9, height = 13.90, units = "in", dpi = 300)
+
+
