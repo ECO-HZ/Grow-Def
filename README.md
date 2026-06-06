@@ -38,6 +38,8 @@ The names of R-scripts correspond to the statistical analysis and visualization 
     * Group: Group of sampling site (population)
     * Latitude: Latitude of sampling sites
     * Longitude: Longitude of sampling sites
+    * lat_jitter: Jittered latitude
+    * lon_jitter: Jittered longitude
     * FUNGSR: Soil entire fungal richness
     * PATHSR: Soil pathogenic fungal richness
     * AMFSR: Soil AMF richness
@@ -48,10 +50,9 @@ The names of R-scripts correspond to the statistical analysis and visualization 
     * HerbAB: Abundance of herbivorous insects (site level)
     * HerbFR: Richness (family) of herbivorous insects (site level)
     * ALLplSR: Plant species richness
-    * Cover: Cover of studying species (%)
-    * Rel_cover: Relative cover of studying species
-    * Defol: Foliar defoliation (%)
-    * Disease: Foliar pathogen infection (%)
+    * Rel_cover: Relative cover of focal species
+    * Defol_med: Foliar defoliation (%)
+    * Disease_med: Foliar pathogen infection (%)
     * Con_mass: Aboveground biomass of studying sepcies (g)
     * Lesion: Leaf fungal pathogen infection (# of lesions)
     * Knots: Root nematode infection (# of root knots)
