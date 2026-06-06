@@ -38,7 +38,10 @@ climate_data <- cbind(coords_data, clim_values[-1])
 colnames(climate_data)
 #climate_data = unique(field_survey_dataset[,c(5,6,25:43)])
 # Spearman correlation matrix
-corr_matrix <- corr.test(climate_data[,c(4,15:22,5:14)], method = "spearman", adjust = "none")
+colnames(figure_2_data_reshape)
+
+#corr_matrix <- corr.test(climate_data[,c(4,15:22,5:14)], method = "spearman", adjust = "none")
+corr_matrix <- corr.test(figure_2_data_reshape[,c(33:51)], method = "spearman", adjust = "none")
 
 # only show the signification correlation
 col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
@@ -53,7 +56,7 @@ corrplot(corr_matrix$r, p.mat = corr_matrix$p, sig.level = 0.05, insig = 'blank'
 # retained bio1 (annual mean temperature) and bio15 (precipitation seasonality) 
 # given their low collinearity with other variables (Spearman |R| < 0.7) and 
 # ecological relevance to plant performance.
-
+cor.test(field_survey_dataset$Bio1, field_survey_dataset$Bio15)
 
 ################## Classification of fungal functional guilds ##################
 
@@ -132,12 +135,14 @@ figure_4_data <- read.xlsx("Field_survey_dataset.xlsx", sheet = "Field_survey", 
 figure_4_data$Origin <- ifelse(figure_4_data$Species == "Alternanthera_philoxeroides", "Invasive", "Native")
 figure_4_data$Origin <- factor(figure_4_data$Origin, levels = c("Native", "Invasive"))
 figure_4_data$Species <- as.factor(figure_4_data$Species)
+colnames(figure_4_data)
 
+set.seed(123456)
 # raw data
-test_var = c("Soil_wc_all", "Soil_C_all", "Soil_N_all", "Soil_ph_all", 
-             "Bio1", "Bio15", 
-             "ALLplSR", "HerbFR", "HerbAB", "Defol", 
-             "Disease", "FUNGSR", "PATHSR", "AMFSR",
+test_var = c("Bio1", "Bio15", 
+             "Soil_wc_all", "Soil_C_all", "Soil_N_all", "Soil_ph_all", 
+             "ALLplSR", "HerbFR", "HerbAB", "Defol_med", "Disease_med", 
+             "FUNGSR", "PATHSR", "AMFSR",
              "Con_mass", "Bsurv", "Lesion", "Knots", "Rel_cover")
 
 colnames(figure_4_data)
@@ -182,3 +187,4 @@ for (var_name in test_var) {
 }
 
 print(moran_results)
+
