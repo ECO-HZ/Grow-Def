@@ -37,6 +37,8 @@ figure_2_data_unique$lon_jitter <- figure_2_data_unique$Longitude
 figure_2_data_reshape = rbind(figure_2_data_same, figure_2_data_unique)
 colnames(figure_2_data_reshape)
 
+figure_2_data_reshape = figure_2_data
+
 library(nlme)
 library(MuMIn)
 Rel_cover_data = figure_2_data_reshape[complete.cases(figure_2_data_reshape[, "Rel_cover"]), ]
@@ -92,7 +94,7 @@ ggplot(data = Rel_cover_data, aes(x = Latitude, y = log10(Rel_cover))) +
   scale_color_manual(values = c("Native" = "#00688B", "Invasive" = "#FFC225")) + 
   scale_x_continuous(breaks = breaks_width(4)) +
   theme_classic() +
-  scale_y_continuous(expand = c(0, 0.3)) +
+  scale_y_continuous(expand = c(0, 0.4)) +
   theme(axis.title = element_text(size = 13),
         axis.text=element_text(color="black", size=11),
         legend.text= element_text(size=11),
