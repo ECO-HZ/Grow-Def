@@ -118,6 +118,8 @@ figure_1_data_unique$lon_jitter <- figure_1_data_unique$Longitude
 figure_1_data_reshape = rbind(figure_1_data_same, figure_1_data_unique)
 colnames(figure_1_data_reshape)
 
+figure_1_data_reshape = figure_1_data
+
 # for both
 #figure_1_data_reshape = subset(figure_1_data_reshape, Group == "Both")
 
@@ -184,6 +186,7 @@ MuMIn::AICc(mod1,mod2,mod3,mod4,mod5)
 mod1 <- gls(Soil_C_all ~ Latitude*Species, correlation = corExp(form = ~ lat_jitter + lon_jitter), data = Soil_C_data, method = "REML", na.action = na.omit)
 shapiro.test(resid(mod1))
 hist(resid(mod1))
+plot(fitted(mod1), resid(mod1, type = "normalized"))
 
 # log10 translation
 Soil_C_data$LOGSoil_C = log10(Soil_C_data$Soil_C_all)
@@ -238,7 +241,7 @@ mod0 <- gls(LOGSoil_C ~ Latitude, correlation = corExp(form = ~ lat_jitter + lon
 Soil_C_data$F00 <- predictSE(mod0, Soil_C_data, level = 0)$fit
 Soil_C_data$SE0 <- predictSE(mod0, Soil_C_data, level = 0)$se.fit
 
-ggplot(data = Soil_C_data, aes(x = Latitude, y = log10(Soil_C_all), fill = Group)) + 
+ggplot(data = Soil_C_data, aes(x = Latitude, y = log10(Soil_C_all))) + 
   geom_point(size = 2.5, aes(color = Group, fill = Group), pch = 21, stroke = 0.7) + 
   geom_line(aes(y=F00), size=1, linetype = 2, color = "black") + 
   scale_fill_manual(values = c("Native" = alpha("#00688B", 0.5), "Invasive" = alpha("#FFC225", 0.5), "Both" = alpha("#424768", 0.3))) + 
@@ -533,7 +536,7 @@ ggplot(bio15_data, aes(x=Latitude, y=Bio15)) +
 
 (Figure_1B/Figure_1D/Figure_1F)|(Figure_1C/Figure_1E/Figure_1G) -> Figure_1B_G
 
-#ggsave("Figure_1B_G.pdf", plot = Figure_1B_G, width = 8.5, height = 10.0, units = "in", dpi = 300)
+#ggsave("Figure_1B_G-0606.pdf", plot = Figure_1B_G, width = 8.5, height = 10.0, units = "in", dpi = 300)
 #ggsave("Figure_1A.pdf", plot = Figure_1A, width = 8.9, height = 9.8, units = "in", dpi = 300)
 
 
