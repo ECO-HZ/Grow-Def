@@ -14,12 +14,6 @@ library(vegan)
 
 files <- list.files("F:/2024-2025分析相关文件/植物抗性纬度变化/J eco 9-21/bioclimate_30s/climate/wc2.1_30s", 
                     pattern = "tif$", full.names = TRUE)
-
-# download WorldClim 2.1 bioclimatic variables at 2.5 arc-minute resolution
-#wc <- worldclim_global(var="bio", res=2.5, path="bioclimate")
-#files <- list.files("J ECO R Code & dataset/bioclimate/climate/wc2.1_2.5m", 
-#                    pattern = "tif$", full.names = TRUE)
-
 wc <- rast(files)
 #plot(wc$wc2.1_30s_bio_1)
 
